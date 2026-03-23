@@ -2,6 +2,8 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Swal from 'sweetalert2'
+
 
 function App() {
   const [nombre, setNombre] = useState('');
@@ -23,7 +25,6 @@ function App() {
     })
     .then(() => {
       console.log('Empleado registrado');
-      alert('Empleado registrado');
       setNombre('');
       setEdad('');
       setPais('');
@@ -31,6 +32,13 @@ function App() {
       setAnios('');
 
       getEmpleados();
+      Swal.fire({
+        title: "<strong>Empleado registrado</strong>",
+        html: `<i>El empleado <strong>${nombre}</strong> ha sido registrado exitosamente</i>`,
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        timer:3000
+      });
     })
     .catch(err => {
       console.error('Error al registrar:', err);
@@ -47,8 +55,6 @@ function App() {
       id: id
     })
     .then(() => {
-      console.log('Empleado actualizado');
-      alert('Empleado actualizado');
       setNombre('');
       setEdad('');
       setPais('');
@@ -56,8 +62,22 @@ function App() {
       setAnios('');
 
       getEmpleados();
+       Swal.fire({
+        title: "<strong>Empleado actualizado</strong>",
+        html: `<i>El empleado <strong>${nombre}</strong> ha sido actualizado exitosamente</i>`,
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        timer:3000
+      });
     })
     .catch(err => {
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo actualizar el empleado.',
+        icon: 'error',
+        timer:2000,
+        confirmButtonText: 'Aceptar'
+      });
       console.error('Error al registrar:', err);
     });
   };
@@ -86,9 +106,51 @@ function App() {
         setEmpleados(response.data);
       })
       .catch(err => {
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudieron obtener los empleados.',
+          icon: 'error',
+          timer:2000,
+          confirmButtonText: 'Aceptar'
+        });
         console.error('Error al obtener empleados:', err);
       });
   };
+
+  const eliminarEmpleado = (id) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¡No podrás deshacerte de esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:3001/delete/${id}`)
+        .then(() => {getEmpleados();
+            Swal.fire({
+              title: '¡Eliminado!',
+              text: 'Ha sido eliminado correctamente.',
+              icon: 'success',
+              timer:2000
+            });
+          })
+          .catch(err => {
+           Swal.fire({
+              title: 'Error',
+              text: 'No se pudo eliminar el empleado.',
+              icon: 'error',
+              timer:2000,
+              confirmButtonText: 'Aceptar'
+            });
+            console.error('Error al eliminar empleado:', err);
+          });
+      }
+    });
+  }
 
   useEffect(() => {
     getEmpleados();
@@ -107,7 +169,7 @@ function App() {
 
             <div className="input-group mb-3">
               <span className="input-group-text">Nombre:</span>
-              <input
+              <input required
                 type="text"
                 className="form-control"
                 placeholder="Ingrese un nombre"
@@ -118,7 +180,7 @@ function App() {
 
             <div className="input-group mb-3">
               <span className="input-group-text">Edad:</span>
-              <input
+              <input required
                 type="number"
                 className="form-control"
                 placeholder="Ingrese la edad"
@@ -194,7 +256,7 @@ function App() {
               <td>{val.anios}</td>
               <td>
                 <button className="btn btn-primary btn-sm me-2" onClick={() => editarEmpleado(val)}>Editar</button>
-                <button className="btn btn-danger btn-sm">Eliminar</button>
+                <button className="btn btn-danger btn-sm" onClick={() => eliminarEmpleado(val.id)}>Eliminar</button>
               </td>
             </tr>
            ))}          
