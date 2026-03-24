@@ -9,8 +9,6 @@ Aplicación para la gestión de empleados que permite "registrar, editar, elimin
 
 Este proyecto fue desarrollado como práctica de desarrollo "Frontend + Backend + Base de Datos".
 
----
-
 🖥️ Vista del sistema
 
 
@@ -35,8 +33,6 @@ Este proyecto fue desarrollado como práctica de desarrollo "Frontend + Backend 
 🔹 MySQL
 🔹 Laragon
 
----
-
 ⚙️ Funcionalidades
 
 ✅ Registrar empleados
@@ -46,11 +42,8 @@ Este proyecto fue desarrollado como práctica de desarrollo "Frontend + Backend 
 ✅ Ordenar empleados por columnas
 ✅ Indicador de carga (Loading spinner)
 
----
-
 📂 Estructura del proyecto
 
-```
 CRUD
 │
 ├── client
@@ -67,49 +60,38 @@ CRUD
 │       └── index.js
 │
 └── README.md
-```
 
----
 
 🚀 Instalación del proyecto
 
- 1️⃣ Clonar repositorio
+1️⃣ Clonar repositorio
 
-```
-git clone https://github.com/LFcoronado/crud.git
-```
-
----
+🔹git clone https://github.com/LFcoronado/crud.git
 
 2️⃣ Instalar dependencias
 
- Frontend
+🔹Frontend
 
-```
 $cd client
 npm install
-```
 
-Backend
+🔹Backend
 
-```
 $cd server
 npm install
-```
 
----
 
 3️⃣ Configurar base de datos
 
-Crear base de datos en MySQL:
+🔹Crear base de datos en MySQL:
 
-```
+
 CREATE DATABASE empleados;
-```
+
 
 Crear tabla:
 
-```
+
 CREATE TABLE empleados (
  id INT AUTO_INCREMENT PRIMARY KEY,
  nombre VARCHAR(100),
@@ -118,21 +100,18 @@ CREATE TABLE empleados (
  cargo VARCHAR(100),
  anios INT
 );
-```
 
----
 
 4️⃣ Ejecutar el proyecto
 
 🔹 Backend
-```
+
 npm start
-```
- 🔹Frontend
-```
+
+🔹Frontend
+
 npm start
-```
----
+
 
 📸 Características del sistema
 
@@ -142,7 +121,6 @@ npm start
 ⚡ Interfaz rápida y sencilla
 🎨 Diseño con Bootstrap
 
----
 
 🚀 Mejoras futuras
 
@@ -150,7 +128,6 @@ npm start
 🔹 Documentación de API
 🔹 Deploy en la nube
 
----
 
 👨‍💻 Autor
 
@@ -159,6 +136,5 @@ npm start
 💻 Estudiante de Tecnología en Sistemas
 🚀 Interesado en desarrollo Full Stack
 
----
 
 ⭐ Si te gusta este proyecto puedes darle una estrella al repositorio.
