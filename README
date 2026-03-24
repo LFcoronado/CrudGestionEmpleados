@@ -1,9 +1,10 @@
 🚀 Sistema de Gestión de Empleados
 
-![React](https://img.shields.io/badge/React-Frontend-blue)
-![Node](https://img.shields.io/badge/Node.js-Backend-green)
-![MySQL](https://img.shields.io/badge/MySQL-Database-orange)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-UI-purple)
+![React](https://img.shields.io/badge/React-18-blue?logo=react&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-Backend-green?logo=node.js&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-Database-orange?logo=mysql&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-UI-purple?logo=bootstrap&logoColor=white)
+
 
 Aplicación para la gestión de empleados que permite "registrar, editar, eliminar, buscar y ordenar empleados" de forma sencilla.
 
