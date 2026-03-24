@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 
+
 import EmployeeForm from "./components/EmployeeForm";
 import EmployeeTable from "./components/EmployeeTable";
 
@@ -222,6 +223,9 @@ function App() {
     value={busqueda}
     onChange={(e) => setBusqueda(e.target.value)}
   />
+  <p className="mt-2">
+Total empleados: <strong>{empleados.length}</strong>
+</p>
 </div>
       <EmployeeTable
         empleados={empleadosFiltrados}

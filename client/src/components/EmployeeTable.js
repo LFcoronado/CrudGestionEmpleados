@@ -1,20 +1,43 @@
 import React from "react";
+import { useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
+
 
 function EmployeeTable({ empleados, editarEmpleado, eliminarEmpleado, loading }) {
+ const [orden, setOrden] = useState("asc");
+ const [campoOrden, setCampoOrden] = useState("");
+ 
+ const ordenar = (campo) => {
+  const nuevoOrden = orden === "asc" ? "desc" : "asc";
+  setOrden(nuevoOrden);
+  setCampoOrden(campo);
+}
+const empleadosOrdenados = [...empleados].sort((a, b) => {
+
+  if (!campoOrden) return 0;
+
+  if (orden === "asc") {
+    return a[campoOrden] > b[campoOrden] ? 1 : -1;
+  } else {
+    return a[campoOrden] < b[campoOrden] ? 1 : -1;
+  }
+
+});
+ 
   return (
     <table className="table table-striped mt-4">
 
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Nombre</th>
-          <th>Edad</th>
-          <th>País</th>
-          <th>Cargo</th>
-          <th>Experiencia</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
+     <thead>
+       <tr>
+        <th>#</th>
+        <th onClick={() => ordenar("nombre")} style={{cursor:"pointer"}}>Nombre ⬍</th>
+        <th onClick={() => ordenar("edad")} style={{cursor:"pointer"}}>Edad ⬍</th>
+        <th onClick={() => ordenar("pais")} style={{cursor:"pointer"}}>País ⬍</th>
+        <th onClick={() => ordenar("cargo")} style={{cursor:"pointer"}}>Cargo ⬍</th>
+        <th>Experiencia</th>
+        <th>Acciones</th>
+    </tr>
+</thead>
 
       <tbody>
 
@@ -29,7 +52,7 @@ function EmployeeTable({ empleados, editarEmpleado, eliminarEmpleado, loading })
 
         ) : (
 
-          empleados.map((val) => (
+          empleadosOrdenados.map((val) => (
 
             <tr key={val.id}>
               <th>{val.id}</th>
@@ -45,14 +68,14 @@ function EmployeeTable({ empleados, editarEmpleado, eliminarEmpleado, loading })
                   className="btn btn-primary btn-sm me-2"
                   onClick={() => editarEmpleado(val)}
                 >
-                  Editar
+                  <FaEdit />
                 </button>
 
                 <button
                   className="btn btn-danger btn-sm"
                   onClick={() => eliminarEmpleado(val.id)}
                 >
-                  Eliminar
+                  <FaTrash />
                 </button>
 
               </td>
