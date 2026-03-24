@@ -1,269 +1,237 @@
-import './App.css';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Swal from 'sweetalert2'
+import "./App.css";
+import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+import "bootstrap/dist/css/bootstrap.min.css";
 
+
+import EmployeeForm from "./components/EmployeeForm";
+import EmployeeTable from "./components/EmployeeTable";
+
+import {getEmpleados,createEmpleado, updateEmpleado, deleteEmpleado} from "./services/empleadosService";
 
 function App() {
-  const [nombre, setNombre] = useState('');
-  const [edad, setEdad] = useState('');
-  const [pais, setPais] = useState('');
-  const [cargo, setCargo] = useState('');
-  const [anios, setAnios] = useState('');
-  const [empleados, setEmpleados] = useState([]);
-  const [id, setId] = useState(0);
+ const [nombre, setNombre] = useState("");
+ const [edad, setEdad] = useState("");
+ const [pais, setPais] = useState("");
+ const [cargo, setCargo] = useState("");
+ const [anios, setAnios] = useState("");
 
-  const [editar, setEditar] = useState(false);
+ const [empleados, setEmpleados] = useState([]);
+ const [id, setId] = useState(0);
+ const [editar, setEditar] = useState(false);
+ const [loading, setLoading] = useState(false);
+ const [busqueda, setBusqueda] = useState("");
+
+
+ const empleadosFiltrados = empleados.filter((emp) =>
+  emp.nombre.toLowerCase().includes(busqueda.toLowerCase())||
+  emp.pais.toLowerCase().includes(busqueda.toLowerCase()) ||
+  emp.cargo.toLowerCase().includes(busqueda.toLowerCase())
+);
+  const limpiarCampos = () => {
+    setNombre("");setEdad("");setPais(""); setCargo("");setAnios("");
+  }
+  const cargarEmpleados = () => {
+     setLoading(true);
+
+    getEmpleados()
+      .then((res) => {
+        setEmpleados(res.data);
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "Error",
+          text: "No se pudieron cargar los empleados",
+          icon: "error",
+          confirmButtonText: "Aceptar"
+        });
+        console.error(err);
+      }).finally(() => {
+      setLoading(false);
+    });
+  };
+  useEffect(() => {
+    cargarEmpleados();
+  }, []);
+
+
   const add = () => {
-    axios.post('http://localhost:3001/create', {
-      nombre,
-      edad,
-      pais,
-      cargo,
-      anios
-    })
-    .then(() => {
-      console.log('Empleado registrado');
-      setNombre('');
-      setEdad('');
-      setPais('');
-      setCargo('');
-      setAnios('');
 
-      getEmpleados();
-      Swal.fire({
+    if (!nombre || !edad || !pais || !cargo || !anios) {
+    Swal.fire({
+      title: "Campos incompletos",
+      text: "Por favor completa todos los campos",
+      icon: "warning",
+      confirmButtonText: "Aceptar"
+    });
+    return;
+  }
+    createEmpleado({ nombre, edad, pais, cargo, anios })
+      .then(() => {
+        cargarEmpleados();
+       Swal.fire({
         title: "<strong>Empleado registrado</strong>",
         html: `<i>El empleado <strong>${nombre}</strong> ha sido registrado exitosamente</i>`,
         icon: 'success',
         confirmButtonText: 'Aceptar',
         timer:3000
       });
-    })
-    .catch(err => {
-      console.error('Error al registrar:', err);
-    });
+        limpiarCampos();
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo registrar el empleado",
+          icon: "error",
+          confirmButtonText: "Aceptar"
+        });
+        console.error(err);
+
+      });
+
   };
 
-  const update= () => {
-    axios.put(`http://localhost:3001/update/${id}`, {
-      nombre: nombre,
-      edad: edad,
-      pais: pais,
-      cargo: cargo,
-      anios: anios,
-      id: id
-    })
-    .then(() => {
-      setNombre('');
-      setEdad('');
-      setPais('');
-      setCargo('');
-      setAnios('');
 
-      getEmpleados();
-       Swal.fire({
-        title: "<strong>Empleado actualizado</strong>",
-        html: `<i>El empleado <strong>${nombre}</strong> ha sido actualizado exitosamente</i>`,
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-        timer:3000
-      });
-    })
-    .catch(err => {
-      Swal.fire({
-        title: 'Error',
-        text: 'No se pudo actualizar el empleado.',
-        icon: 'error',
-        timer:2000,
-        confirmButtonText: 'Aceptar'
-      });
-      console.error('Error al registrar:', err);
+  const update = () => {
+    if (!nombre || !edad || !pais || !cargo || !anios) {
+    Swal.fire({
+      title: "Campos incompletos",
+      text: "Por favor completa todos los campos",
+      icon: "warning",
+      confirmButtonText: "Aceptar"
     });
+    return;
+  }
+    updateEmpleado(id, { nombre, edad, pais, cargo, anios })
+      .then(() => {
+        cargarEmpleados();
+        Swal.fire({
+          title: "Actualizado",
+          text: "Empleado actualizado correctamente",
+          icon: "success",
+          timer: 2500,
+          confirmButtonText: "Aceptar"
+        });
+        limpiarCampos();
+        setEditar(false);
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo actualizar el empleado",
+          icon: "error",
+          confirmButtonText: "Aceptar"
+        });
+        console.error(err);
+      });
   };
-  const editarEmpleado =(val) => {
-  setEditar(true);
-  setNombre(val.nombre);
-  setEdad(val.edad);
-  setPais(val.pais);
-  setCargo(val.cargo);
-  setAnios(val.anios);
-  setId(val.id);
-}
+
+  const editarEmpleado = (val) => {
+    setEditar(true);
+    setNombre(val.nombre);
+    setEdad(val.edad);
+    setPais(val.pais);
+    setCargo(val.cargo);
+    setAnios(val.anios);
+    setId(val.id);
+
+  };
+
 
   const cancelar = () => {
     setEditar(false);
-    setNombre('');
-    setEdad('');
-    setPais('');
-    setCargo('');
-    setAnios('');
-    setId(0);
+    limpiarCampos();
+
   };
-  const getEmpleados = () => {
-    axios.get('http://localhost:3001/empleados')
-      .then((response) => {
-        setEmpleados(response.data);
-      })
-      .catch(err => {
-        Swal.fire({
-          title: 'Error',
-          text: 'No se pudieron obtener los empleados.',
-          icon: 'error',
-          timer:2000,
-          confirmButtonText: 'Aceptar'
-        });
-        console.error('Error al obtener empleados:', err);
-      });
-  };
+
 
   const eliminarEmpleado = (id) => {
+
     Swal.fire({
-      title: '¿Estás seguro?',
-      text: "¡No podrás deshacerte de esto!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminarlo!',
-      cancelButtonText: 'Cancelar'
+      title: "¿Estás seguro?",
+      text: "No podrás revertir esta acción",
+      icon: "warning",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar"
     }).then((result) => {
+
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:3001/delete/${id}`)
-        .then(() => {getEmpleados();
+
+        deleteEmpleado(id)
+
+          .then(() => {
+
+            cargarEmpleados();
+
             Swal.fire({
-              title: '¡Eliminado!',
-              text: 'Ha sido eliminado correctamente.',
-              icon: 'success',
-              timer:2000
+              title: "Eliminado",
+              text: "Empleado eliminado correctamente",
+              icon: "success",
+              timer: 2500,
+              confirmButtonText: "Aceptar"
             });
+
           })
-          .catch(err => {
-           Swal.fire({
-              title: 'Error',
-              text: 'No se pudo eliminar el empleado.',
-              icon: 'error',
-              timer:2000,
-              confirmButtonText: 'Aceptar'
+
+          .catch((err) => {
+
+            Swal.fire({
+              title: "Error",
+              text: "No se pudo eliminar el empleado",
+              icon: "error",
+              confirmButtonText: "Aceptar"
             });
-            console.error('Error al eliminar empleado:', err);
+
+            console.error(err);
+
           });
+
       }
+
     });
-  }
 
-  useEffect(() => {
-    getEmpleados();
-  }, []);
+  };
 
-  
 
   return (
+
     <div className="container">
-        <div className="card text-center">
-          <div className="card-header">
-            GESTION DE EMPLEADOS
-          </div>
+      <h2 className="text-center mb-4">Sistema Gestión de Empleados</h2>
 
-          <div className="card-body">
+      <EmployeeForm
+        nombre={nombre}
+        edad={edad}
+        pais={pais}
+        cargo={cargo}
+        anios={anios}
+        setNombre={setNombre}
+        setEdad={setEdad}
+        setPais={setPais}
+        setCargo={setCargo}
+        setAnios={setAnios}
+        editar={editar}
+        add={add}
+        update={update}
+        cancelar={cancelar}
+      />
+      <div className="mb-3 mt-3">
+  <input
+    type="text"
+    className="form-control"
+    placeholder="Buscar empleado"
+    value={busqueda}
+    onChange={(e) => setBusqueda(e.target.value)}
+  />
+</div>
+      <EmployeeTable
+        empleados={empleadosFiltrados}
+        editarEmpleado={editarEmpleado}
+        eliminarEmpleado={eliminarEmpleado}
+        loading={loading}
+      />
 
-            <div className="input-group mb-3">
-              <span className="input-group-text">Nombre:</span>
-              <input required
-                type="text"
-                className="form-control"
-                placeholder="Ingrese un nombre"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-              />
-            </div>
-
-            <div className="input-group mb-3">
-              <span className="input-group-text">Edad:</span>
-              <input required
-                type="number"
-                className="form-control"
-                placeholder="Ingrese la edad"
-                value={edad}
-                onChange={(e) => setEdad(e.target.value)}
-              />
-            </div>
-
-            <div className="input-group mb-3">
-              <span className="input-group-text">País:</span>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Ingrese el país"
-                value={pais}
-                onChange={(e) => setPais(e.target.value)}
-              />
-            </div>
-
-            <div className="input-group mb-3">
-              <span className="input-group-text">Cargo:</span>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Ingrese el cargo"
-                value={cargo}
-                onChange={(e) => setCargo(e.target.value)}
-              />
-            </div>
-
-            <div className="input-group mb-3">
-              <span className="input-group-text">Años:</span>
-              <input
-                type="number"
-                className="form-control"
-                placeholder="Ingrese los años de experiencia"
-                value={anios}
-                onChange={(e) => setAnios(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="card-footer text-body-secondary">
-            {
-            editar ?
-            <div>
-              <button className="btn btn-warning m-2" onClick={update}>Actualizar</button> <button className="btn btn-warning" onClick={cancelar}>Cancelar</button>
-            </div> 
-            : <button className="btn btn-success m-2" onClick={add}>Registrar</button>
-            }
     </div>
-        </div>
-        <table className="table table-striped">
-            <thead>
-               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Edad</th>
-                <th scope="col">País</th>
-                <th scope="col">Cargo</th>
-                <th scope="col">Experiencia</th>
-                <th scope="col">Acciones</th>
-              </tr>
-            </thead>
-          <tbody>
-           {empleados.map((val, key) => (
-            <tr key={key}>
-              <th scope="row">{val.id}</th>
-              <td>{val.nombre}</td>
-              <td>{val.edad}</td>
-              <td>{val.pais}</td>
-              <td>{val.cargo}</td>
-              <td>{val.anios}</td>
-              <td>
-                <button className="btn btn-primary btn-sm me-2" onClick={() => editarEmpleado(val)}>Editar</button>
-                <button className="btn btn-danger btn-sm" onClick={() => eliminarEmpleado(val.id)}>Eliminar</button>
-              </td>
-            </tr>
-           ))}          
-            </tbody>
-        </table>
-       </div>
-  
+
   );
 }
 
