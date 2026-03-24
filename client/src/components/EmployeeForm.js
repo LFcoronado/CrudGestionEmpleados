@@ -1,14 +1,6 @@
 import React from "react";
 
-function EmployeeForm({
-  nombre,
-  edad,
-  pais,
-  cargo,
-  anios,
-  setNombre,
-  setEdad,
-  setPais,
+function EmployeeForm({nombre,edad,pais,cargo,anios,setNombre,setEdad,setPais,
   setCargo,
   setAnios,
   editar,
@@ -19,9 +11,7 @@ function EmployeeForm({
   return (
     <div className="card text-center">
 
-      <div className="card-header">
-        GESTION DE EMPLEADOS
-      </div>
+      
 
       <div className="card-body">
 

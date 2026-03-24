@@ -197,6 +197,7 @@ function App() {
   return (
 
     <div className="container">
+      
       <h2 className="text-center mb-4">Sistema Gestión de Empleados</h2>
 
       <EmployeeForm
@@ -223,9 +224,7 @@ function App() {
     value={busqueda}
     onChange={(e) => setBusqueda(e.target.value)}
   />
-  <p className="mt-2">
-Total empleados: <strong>{empleados.length}</strong>
-</p>
+  <p className="mt-2">Total empleados: <strong>{empleados.length}</strong></p>
 </div>
       <EmployeeTable
         empleados={empleadosFiltrados}
@@ -234,8 +233,20 @@ Total empleados: <strong>{empleados.length}</strong>
         loading={loading}
       />
 
+      <footer className="footer mt-5 py-3 text-center">
+  <p>
+    © {new Date().getFullYear()} Sistema de Gestión de Empleados | 
+    Desarrollado por <strong>Luis Felipe Coronado</strong> |  
+    <a 
+      href="https://github.com/LFcoronado" 
+      target="_blank" 
+      rel="noopener noreferrer"
+    >
+      GitHub
+    </a>
+  </p>
+    </footer>
     </div>
-
   );
 }
 

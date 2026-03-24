@@ -43,25 +43,6 @@ Este proyecto fue desarrollado como práctica de desarrollo "Frontend + Backend 
 ✅ Ordenar empleados por columnas
 ✅ Indicador de carga (Loading spinner)
 
-📂 Estructura del proyecto
-
-CRUD
-│
-├── client
-│   ├── components
-│   │   └── EmployeeTable.js
-│   ├── services
-│   └── App.js
-│
-├── server
-│   └── src
-│       ├── config
-│       ├── controllers
-│       ├── routes
-│       └── index.js
-│
-└── README.md
-
 
 🚀 Instalación del proyecto
 

@@ -7,12 +7,13 @@ function EmployeeTable({ empleados, editarEmpleado, eliminarEmpleado, loading })
  const [orden, setOrden] = useState("asc");
  const [campoOrden, setCampoOrden] = useState("");
  
- const ordenar = (campo) => {
+  const ordenar = (campo) => {
   const nuevoOrden = orden === "asc" ? "desc" : "asc";
   setOrden(nuevoOrden);
   setCampoOrden(campo);
 }
-const empleadosOrdenados = [...empleados].sort((a, b) => {
+// Ordenar empleados
+ const empleadosOrdenados = [...empleados].sort((a, b) => {
 
   if (!campoOrden) return 0;
 
@@ -51,7 +52,7 @@ const empleadosOrdenados = [...empleados].sort((a, b) => {
           </tr>
 
         ) : (
-
+          //Mostrar empleados ordenados
           empleadosOrdenados.map((val) => (
 
             <tr key={val.id}>
@@ -77,17 +78,11 @@ const empleadosOrdenados = [...empleados].sort((a, b) => {
                 >
                   <FaTrash />
                 </button>
-
               </td>
-
             </tr>
-
           ))
-
         )}
-
       </tbody>
-
     </table>
   );
 }

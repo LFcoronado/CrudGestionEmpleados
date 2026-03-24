@@ -1,24 +1,28 @@
 .App{
+  min-height:100vh;
   display:flex;
   justify-content:center;
-  align-items:center;
-  min-height:100vh;
+  align-items:flex-start;
   background: linear-gradient(135deg,#667eea,#764ba2);
+  padding-top:40px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+
 .container{
   background:white;
-  padding:30px;
+  padding:35px;
   border-radius:15px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  box-shadow:0 12px 30px rgba(0,0,0,0.2);
+  max-width:1000px;
 }
+
 
 .datos{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:10px;
+  gap:12px;
 }
 
 .datos input{
@@ -29,7 +33,7 @@
   border-radius:8px;
   border:1px solid #ddd;
   outline:none;
-  transition: all 0.3s ease;
+  transition:all 0.3s ease;
 }
 
 .datos input:focus{
@@ -55,6 +59,16 @@
   transform:translateY(-2px);
 }
 
+
+.search-input{
+  max-width:400px;
+  margin:auto;
+  border-radius:20px;
+  padding:10px 15px;
+}
+
+
+
 table{
   margin-top:25px;
   border-radius:10px;
@@ -66,14 +80,31 @@ thead{
   color:white;
 }
 
-tbody tr:hover{
-  background:#f5f6ff;
+tbody tr{
   transition:0.2s;
 }
-.search-input{
-  max-width:400px;
-  margin:auto;
-  border-radius:20px;
-  padding:10px 15px;
+
+tbody tr:hover{
+  background:#f5f6ff;
 }
 
+
+.footer{
+  border-top:1px solid #ddd;
+  color:#666;
+  font-size:14px;
+  margin-top:30px;
+}
+
+.footer a{
+  text-decoration:none;
+  font-weight:500;
+}
+
+.footer a:hover{
+  text-decoration:underline;
+}
+h2{
+  font-weight:700;
+  color:#333;
+}
